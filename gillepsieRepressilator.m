@@ -107,3 +107,29 @@ xlabel('Generation Number'); ylabel('Protein Concentration');
 legend('tetR Concentration', 'lambdaCl Concentration', 'lacL Concentration');
 set(gca, 'FontSize', 24);
 hold off
+
+%find maxima of peaks of protein levels
+[maxdat_tetR,maxidx_tetR] = extrema(smooth(tetR,750));
+maxima_tetR = maxdat_tetR(maxdat_tetR>mean(maxdat_tetR));
+maxima_idx_tetR = generation(maxidx_tetR(maxdat_tetR>mean(maxdat_tetR)));
+
+%Sort the maxima by the order of when they occur, not how high they are.
+%Thus, sort by the maxima indices.
+[~, j] = sort(maxima_idx_tetR);
+maxima_idx_tetR = maxima_idx_tetR(j);
+maxima_tetR = maxima_tetR(j);
+
+figure; 
+plot(generation, tetR,'.-r',maxima_idx_tetR,maxima_tetR,'kx');
+
+for mm=1:length(maxima_idx_tetR)-1
+    period(mm) = maxima_idx_tetR(mm+1)-maxima_idx_tetR(mm);
+end
+%discard transients
+period = period(period>5);
+
+%mean and standard deviation for comparison
+mean_period = mean(period);
+std_period = std(period);
+%mean amplitude of oscillations is just:
+mean_amp = mean(maxdat_tetR);
