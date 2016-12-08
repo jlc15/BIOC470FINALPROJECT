@@ -1,4 +1,4 @@
-function [] = NaiveRepressilator(initTetR, initLambdaCl, initLacL)
+function [generationOutput, tetROutput, lambdaClOutput, lacLOutput] = NaiveRepressilator(initTetR, initLambdaCl, initLacL)
 %Inputs: correspond to initial molecule amounts for each component of repressilator
 %Outputs: protein degradation rate = 1 (as noted in 4.1 Supplementary Info from 
 %Synchronous long-term oscillations in a synthetic gene circuit paper)
