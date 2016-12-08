@@ -1,4 +1,5 @@
 function [maxIndices, maxProtein] = FindProteinMaxima(generation, proteinTrajectory)
+
 %find maxima of peaks of protein levels for a given trajectory
 [maxdat, maxidx] = extrema(smooth(proteinTrajectory, 750));
 maxima = maxdat(maxdat > mean(maxdat));
