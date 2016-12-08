@@ -1,6 +1,6 @@
 function period = CalculatePeriod(generation, proteinTrajectory)
-%returns stats analyses
 
+%returns periods to models (NaiveRepressilator or ImprovedRepressilator)
 [maxIndices, maxProtein] = FindProteinMaxima(generation, proteinTrajectory);
 
 period = zeros(1 : (length(maxIndices) - 1));
