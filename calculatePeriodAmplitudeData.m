@@ -1,5 +1,8 @@
-function [mean_period, std_period, mean_amp] = calculatePeriodAmplitudeData(maxIndices, maxProtein)
+function [mean_period, std_period, mean_amp] = calculatePeriodAmplitudeData(proteinTrajectory)
 %returns stats analyses
+
+[maxIndices, maxProtein] = FindProteinMaxima(proteinTrajectory);
+
 period = zeros(1 : (length(maxIndices) - 1));
 for mm = 1 : length(maxIndices) - 1
     period(mm) = maxIndices(mm - 1) - maxIndices(mm);
