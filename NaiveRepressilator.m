@@ -131,11 +131,11 @@ for ii = 1:100
     lacL_trace = 0;
  
     %input to histograms
-    periodTetR = [periodTetR, CalculatePeriod(tetR)];
+    periodTetR = [periodTetR, CalculatePeriod(generation, tetR)];
     ampStorageTetR = [ampStorageTetR, MeanAmp(tetR)];
-    periodLambdaCl = [periodLambdaCl, CalculatePeriod(lambdaCl)];
+    periodLambdaCl = [periodLambdaCl, CalculatePeriod(generation, lambdaCl)];
     ampStorageLambdaCl = [ampStorageLambdaCl, MeanAmp(lambdaCl)];
-    periodLacL = [periodLacL, CalculatePeriod(lacL)];
+    periodLacL = [periodLacL, CalculatePeriod(generation, lacL)];
     ampStorageLacL = [ampStorageLacL, MeanAmp(lacL)];
 end
 %mean and standard deviation for comparison
