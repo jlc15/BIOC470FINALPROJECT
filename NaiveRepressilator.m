@@ -1,19 +1,11 @@
-%function [generationOutput, tetROutput, lambdaClOutput, lacLOutput] = NaiveRepressilator(initTetR, initLambdaCl, initLacL)
-%Inputs: correspond to initial molecule amounts for each component of repressilator
-%Outputs: protein degradation rate = 1 (as noted in 4.1 Supplementary Info from 
+%protein degradation rate = 1 (as noted in 4.1 Supplementary Info from 
 %Synchronous long-term oscillations in a synthetic gene circuit paper)
 
-%function RepressilatorModelling()
 %initialize p(i) as they are constant for both models
-
-modelAndDataComparison('rfpwithoutsponge.txt', NaiveRepressilator(20, 20, 20));
-% modelAndDataComparison('rfpwithoutsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
-% 
-% modelAndDataComparison('yfpwithoutsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
-% modelAndDataComparison('yfpsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
-% 
-% modelAndDataComparison('cfpwithoutsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
-% modelAndDataComparison('cfpsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
+dataRFPNaive = dlmread('rfpwithoutsponge.txt');
+dataYFPNaive = dlmread('yfpwithoutsponge.txt');
+dataCFPNaive = dlmread('cfpwithoutsponge.txt');
+%for plotting
 periodTetR = [];
 periodLambdaCl = [];
 periodLacL = [];
@@ -34,6 +26,9 @@ for ii = 1:100
     kLambdaCl = 100; 
     kLacL = 100;
     hillCoeff = 4; 
+    initTetR = 20;
+    initLambdaCl = 20;
+    initLacL = 20;
     
     tetR = 0;
     lambdaCl = 0;
@@ -47,7 +42,7 @@ for ii = 1:100
     tetR(1) = initTetR;
     lambdaCl(1) = initLambdaCl; 
     lacL(1) = initLacL;
-
+    
     %counter
     currentTime = 2;
 
@@ -146,34 +141,30 @@ for ii = 1:100
 % set(gca, 'FontSize', 24);
 % hold off
 
-
-
-% figure; 
-% plot(generation, tetR,'.-r',maxima_idx_tetR,maxima_tetR,'kx');
-
     %input to histograms
-    [meanPeriodTetR, stdPeriodTetR, meanAmpTetR] = calculatePeriodAmplitudeData(tetR);
-    [meanPeriodLambdaCl, stdPeriodLambdaCl, meanAmpLambdaCl] = calculatePeriodAmplitudeData(lambdaCl);
-    [meanPeriodLacL, stdPeriodLacL, meanAmpLacL] = calculatePeriodAmplitudeData(lacL);
-
-    periodTetR = [periodTetR, meanPeriodTetR];
-    ampStorageTetR = [ampStorageTetR, meanAmpTetR];
-    periodLambdaCl = [periodLambdaCl, meanPeriodLambdaCl];
-    ampStorageLambdaCl = [ampStorageLambdaCl, meanAmpLambdaCl];
-    periodLacL = [periodLacL, meanPeriodLacL];
-    ampStorageLacL = [ampStorageLacL, meanAmpLacL];
+    periodTetR = [periodTetR, CalculatePeriod(tetR)];
+    ampStorageTetR = [ampStorageTetR, MeanAmp(tetR)];
+    periodLambdaCl = [periodLambdaCl, CalculatePeriod(lambdaCl)];
+    ampStorageLambdaCl = [ampStorageLambdaCl, MeanAmp(lambdaCl)];
+    periodLacL = [periodLacL, CalculatePeriod(lacL)];
+    ampStorageLacL = [ampStorageLacL, MeanAmp(lacL)];
 end
 %mean and standard deviation for comparison
-%mean_period = mean(period);
-%std_period = std(period);
-%mean amplitude of oscillations is just:
-%mean_amp = mean(maxProtein);
-%stats for mean and standard deviation (inconsistency) of period
+meanPeriodTetR = mean(periodTetR);
+stdPeriodTetR = std(periodTetR);
+meanPeriodLambdaCl = mean(periodLambdaCl);
+stdPeriodLambdaCl = std(periodLambdaCl);
+meanPeriodLacL = mean(periodLacL);
+stdPeriodLacL = std(periodLacL);
+
 hist(periodTetR);
 hist(periodLambdaCl);
 hist(periodLacL);
-% mean_period = mean(period_storage);
-% std_period = std(period_storage);
-% %stats for mean amplitude
-% mean_amp = mean(amp_storage);
-% std_amp = std(amp_storage);
+
+%stats for mean amplitude
+meanAmpTetR = mean(ampStorageTetR);
+stdAmpTetR = std(ampStorageTetR);
+meanAmpLambdaCl = mean(ampStorageLambdaCl);
+stdAmpLambdaCl = std(ampStorageLambdaCl);
+meanAmpLacL = mean(ampStorageLacL);
+stdAmpLacL = std(ampStorageLacL);
