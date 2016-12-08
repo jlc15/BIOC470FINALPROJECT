@@ -1,7 +1,7 @@
-function [maxIndices, maxProtein] = FindProteinMaxima(proteinTrajectory)
+function [maxIndices, maxProtein] = FindProteinMaxima(generation, proteinTrajectory)
 %find maxima of peaks of protein levels for a given trajectory
 [maxdat, maxidx] = extrema(smooth(proteinTrajectory, 750));
-maxima = maxdat_tetR(maxdat > mean(maxdat));
+maxima = maxdat(maxdat > mean(maxdat));
 maxima_idx = generation(maxidx(maxdat > mean(maxdat)));
 
 %Sort the maxima by the order of when they occur, not how high they are.
