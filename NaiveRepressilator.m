@@ -1,8 +1,19 @@
-function [generationOutput, tetROutput, lambdaClOutput, lacLOutput] = NaiveRepressilator(initTetR, initLambdaCl, initLacL)
+%function [generationOutput, tetROutput, lambdaClOutput, lacLOutput] = NaiveRepressilator(initTetR, initLambdaCl, initLacL)
 %Inputs: correspond to initial molecule amounts for each component of repressilator
 %Outputs: protein degradation rate = 1 (as noted in 4.1 Supplementary Info from 
 %Synchronous long-term oscillations in a synthetic gene circuit paper)
 
+%function RepressilatorModelling()
+%initialize p(i) as they are constant for both models
+
+modelAndDataComparison('rfpwithoutsponge.txt', NaiveRepressilator(20, 20, 20));
+% modelAndDataComparison('rfpwithoutsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
+% 
+% modelAndDataComparison('yfpwithoutsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
+% modelAndDataComparison('yfpsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
+% 
+% modelAndDataComparison('cfpwithoutsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
+% modelAndDataComparison('cfpsponge.txt', gillespieRepressilatorOutput, SpongeOutput);
 periodTetR = [];
 periodLambdaCl = [];
 periodLacL = [];
