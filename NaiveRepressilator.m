@@ -129,18 +129,7 @@ for ii = 1:100
     tetR_trace = 0;
     lambdaCl_trace = 0;
     lacL_trace = 0;
-    
-% figure;
-% title('Repressilator Protein Concentration as a Fxn of Generation Number');
-% hold on
-% plot(generation, tetR, 'r');
-% plot(generation, lambdaCl, 'g');
-% plot(generation, lacL, 'b');
-% xlabel('Generation Number'); ylabel('Protein Concentration');
-% legend('tetR Concentration', 'lambdaCl Concentration', 'lacL Concentration');
-% set(gca, 'FontSize', 24);
-% hold off
-
+ 
     %input to histograms
     periodTetR = [periodTetR, CalculatePeriod(tetR)];
     ampStorageTetR = [ampStorageTetR, MeanAmp(tetR)];
@@ -168,3 +157,16 @@ meanAmpLambdaCl = mean(ampStorageLambdaCl);
 stdAmpLambdaCl = std(ampStorageLambdaCl);
 meanAmpLacL = mean(ampStorageLacL);
 stdAmpLacL = std(ampStorageLacL);
+
+   
+figure;
+title('Repressilator Protein Concentration as a Fxn of Generation Number');
+hold on;
+plot(generationOutput, tetROutput, 'r');
+plot(generationOutput, lambdaClOutput, 'y');
+plot(generationOutput, lacLOutput, 'b');
+xlabel('Generation Number'); ylabel('Protein Molecules');
+legend('tetR', 'lambdaCl', 'lacL');
+set(gca, 'FontSize', 24);
+hold off
+
