@@ -152,7 +152,11 @@ for ii = 1:100
     periodLacL = [periodLacL, meanPeriodLacL];
     ampStorageLacL = [ampStorageLacL, meanAmpLacL];
 end
-
+%mean and standard deviation for comparison
+%mean_period = mean(period);
+%std_period = std(period);
+%mean amplitude of oscillations is just:
+%mean_amp = mean(maxProtein);
 %stats for mean and standard deviation (inconsistency) of period
 hist(periodTetR);
 hist(periodLambdaCl);
