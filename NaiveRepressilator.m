@@ -1,10 +1,6 @@
 %protein degradation rate = 1 (as noted in 4.1 Supplementary Info from 
 %Synchronous long-term oscillations in a synthetic gene circuit paper)
 
-%initialize p(i) as they are constant for both models
-dataRFPNaive = dlmread('rfpwithoutsponge.txt');
-dataYFPNaive = dlmread('yfpwithoutsponge.txt');
-dataCFPNaive = dlmread('cfpwithoutsponge.txt');
 %for plotting
 periodTetR = [];
 periodLambdaCl = [];
@@ -146,9 +142,10 @@ stdPeriodLambdaCl = std(periodLambdaCl);
 meanPeriodLacL = mean(periodLacL);
 stdPeriodLacL = std(periodLacL);
 
-hist(periodTetR);
-hist(periodLambdaCl);
-hist(periodLacL);
+figure;
+subplot(1,3,1); hist(periodTetR);
+subplot(1,3,2); hist(periodLambdaCl);
+subplot(1,3,3); hist(periodLacL);
 
 %stats for mean amplitude
 meanAmpTetR = mean(ampStorageTetR);
@@ -158,15 +155,28 @@ stdAmpLambdaCl = std(ampStorageLambdaCl);
 meanAmpLacL = mean(ampStorageLacL);
 stdAmpLacL = std(ampStorageLacL);
 
-   
-figure;
-title('Repressilator Protein Concentration as a Fxn of Generation Number');
-hold on;
-plot(generationOutput, tetROutput, 'r');
-plot(generationOutput, lambdaClOutput, 'y');
-plot(generationOutput, lacLOutput, 'b');
-xlabel('Generation Number'); ylabel('Protein Molecules');
-legend('tetR', 'lambdaCl', 'lacL');
-set(gca, 'FontSize', 24);
-hold off
+%initialize p(i) as they are constant for both models
+dataRFPNaive = dlmread('rfpwithoutsponge.txt');
+dataYFPNaive = dlmread('yfpwithoutsponge.txt');
+dataCFPNaive = dlmread('cfpwithoutsponge.txt');   
 
+figure;
+title('Protein as a Fxn of Generation Number');
+subplot(1,2,1);
+hold on;
+title('Data');
+plot(dataRFPNaive(:, 1), dataRFPNaive(:, 2), 'r.');
+plot(dataYFPNaive(:, 1), dataYFPNaive(:, 2), 'y.');
+plot(dataCFPNaive(:, 1), dataCFPNaive(:, 2), 'b.');
+legend('tetR', 'lambdaCl', 'lacL');
+xlabel('Generation Number'); ylabel('Protein Molecules');
+hold off;
+subplot(1,2,2);
+hold on;
+title('Model');
+plot(mean(generationOutput), mean(tetROutput), 'r');
+plot(mean(generationOutput), mean(lambdaClOutput), 'y');
+plot(mean(generationOutput), mean(lacLOutput), 'b');
+legend('tetR', 'lambdaCl', 'lacL');
+xlabel('Generation Number'); ylabel('Protein Molecules');
+hold off;
