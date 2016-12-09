@@ -162,26 +162,10 @@ stdAmpLambdaCl = std(ampStorageLambdaCl);
 meanAmpLacL = mean(ampStorageLacL);
 stdAmpLacL = std(ampStorageLacL);
 
-%read in the data from the paper's simulation of original model to analyze
-%stats
-dataRFPNaive = dlmread('rfpwithoutsponge.txt');
-dataCFPNaive = dlmread('cfpwithoutsponge.txt'); 
-
-%find mean period and std of data from paper
-PeriodRFPNaive = CalculatePeriod(dataRFPNaive(:,1), dataRFPNaive(:, 2),'data');
-PeriodCFPNaive = CalculatePeriod(dataCFPNaive(:, 1), dataCFPNaive(:, 2),'data');
-
-meanPeriodRFPNaive = mean(PeriodRFPNaive);
-stdPeriodRFPNaive = std(PeriodRFPNaive);
-meanPeriodCFPNaive = mean(PeriodCFPNaive);
-stdPeriodCFPNaive = std(PeriodCFPNaive);
-
-%find mean amplitude from data
-meanAmpRFPNaive = MeanAmp(dataRFPNaive(:, 2));
-meanAmpCFPNaive = MeanAmp(dataCFPNaive(:, 2));
-
-%YFP graph from paper needed specific processing to obtain stats
-[meanPeriodYFPNaive, stdPeriodYFPNaive, meanAmpYFPNaive] = StatsYFPNaive();
+%find mean and std of period, and mean amplitude, from data
+[meanPeriodYFPNaive, stdPeriodYFPNaive, meanAmpYFPNaive] = StatsDataNaive('yfpwithoutsponge.txt');
+[meanPeriodCFPNaive, stdPeriodCFPNaive, meanAmpCFPNaive] = StatsDataNaive('cfpwithoutsponge.txt');
+[meanPeriodRFPNaive, stdPeriodRFPNaive, meanAmpRFPNaive] = StatsDataNaive('rfpwithoutsponge.txt');
 
 %Plot model and paper data side by side
 figure;
