@@ -109,15 +109,15 @@ for ii = 1:100
     end
 
     %store the traces from each iteration of gillespie for averaging later and then plotting
-    subsetOfGeneration = floor(linspace(10, currentTime - 1, 2000));
-    for count = 1 : length(subsetOfGeneration)
+    subsetOfGeneration = floor(linspace(10, currentTime - 1, 2000)); %get 2000 evenly spaced points that can be used to index generation for an axis to plot
+    for count = 1 : length(subsetOfGeneration) %use this to index generation and model traces' values at 2000 evenly spaced intervals
         generation_trace(count) = generation(subsetOfGeneration(count));
         tetR_trace(count) = tetR(subsetOfGeneration(count));
         lambdaCl_trace(count) = lambdaCl(subsetOfGeneration(count));
         lacL_trace(count) = lacL(subsetOfGeneration(count));
     end
-    generationOutput = [generationOutput; generation_trace];
-    tetROutput = [tetROutput; tetR_trace];
+    generationOutput = [generationOutput; generation_trace]; %stores generation (x-axis) values for each iteration of Gillespie
+    tetROutput = [tetROutput; tetR_trace]; %stores trace of protein levels
     lambdaClOutput = [lambdaClOutput; lambdaCl_trace];
     lacLOutput = [lacLOutput; lacL_trace];
 
@@ -126,14 +126,16 @@ for ii = 1:100
     lambdaCl_trace = 0;
     lacL_trace = 0;
  
-    %input to histograms
-    periodTetR = [periodTetR, CalculatePeriod(generation, tetR)];
+    %input to histograms of mean period and amplitude of protein level
+    %oscillations for all trajectories
+    periodTetR = [periodTetR, CalculatePeriod(generation, tetR,'model')];
     ampStorageTetR = [ampStorageTetR, MeanAmp(tetR)];
-    periodLambdaCl = [periodLambdaCl, CalculatePeriod(generation, lambdaCl)];
+    periodLambdaCl = [periodLambdaCl, CalculatePeriod(generation, lambdaCl,'model')];
     ampStorageLambdaCl = [ampStorageLambdaCl, MeanAmp(lambdaCl)];
-    periodLacL = [periodLacL, CalculatePeriod(generation, lacL)];
+    periodLacL = [periodLacL, CalculatePeriod(generation, lacL,'model')];
     ampStorageLacL = [ampStorageLacL, MeanAmp(lacL)];
 end
+
 %mean and standard deviation for comparison
 meanPeriodTetR = mean(periodTetR);
 stdPeriodTetR = std(periodTetR);
@@ -142,10 +144,15 @@ stdPeriodLambdaCl = std(periodLambdaCl);
 meanPeriodLacL = mean(periodLacL);
 stdPeriodLacL = std(periodLacL);
 
+%plot histograms
 figure;
-subplot(1,3,1); hist(periodTetR);
-subplot(1,3,2); hist(periodLambdaCl);
-subplot(1,3,3); hist(periodLacL);
+title('Distributions of Proteins'' Periods of Oscillation');
+subplot(1,3,1); hist(periodTetR,10);
+xlabel('TetR period'); ylabel('frequency');
+subplot(1,3,2); hist(periodLambdaCl,10);
+xlabel('LambdaCl period'); ylabel('frequency');
+subplot(1,3,3); hist(periodLacL,10);
+xlabel('LacL period'); ylabel('frequency');
 
 %stats for mean amplitude
 meanAmpTetR = mean(ampStorageTetR);
@@ -155,28 +162,45 @@ stdAmpLambdaCl = std(ampStorageLambdaCl);
 meanAmpLacL = mean(ampStorageLacL);
 stdAmpLacL = std(ampStorageLacL);
 
-%initialize p(i) as they are constant for both models
+%read in the data from the paper's simulation of original model to analyze
+%stats
 dataRFPNaive = dlmread('rfpwithoutsponge.txt');
-dataYFPNaive = dlmread('yfpwithoutsponge.txt');
-dataCFPNaive = dlmread('cfpwithoutsponge.txt');   
+dataCFPNaive = dlmread('cfpwithoutsponge.txt'); 
 
+%find mean period and std of data from paper
+PeriodRFPNaive = CalculatePeriod(dataRFPNaive(:,1), dataRFPNaive(:, 2),'data');
+PeriodCFPNaive = CalculatePeriod(dataCFPNaive(:, 1), dataCFPNaive(:, 2),'data');
+
+meanPeriodRFPNaive = mean(PeriodRFPNaive);
+stdPeriodRFPNaive = std(PeriodRFPNaive);
+meanPeriodCFPNaive = mean(PeriodCFPNaive);
+stdPeriodCFPNaive = std(PeriodCFPNaive);
+
+%find mean amplitude from data
+meanAmpRFPNaive = MeanAmp(dataRFPNaive(:, 2));
+meanAmpCFPNaive = MeanAmp(dataCFPNaive(:, 2));
+
+%YFP graph from paper needed specific processing to obtain stats
+[meanPeriodYFPNaive, stdPeriodYFPNaive, meanAmpYFPNaive] = StatsYFPNaive();
+
+%Plot model and paper data side by side
 figure;
 title('Protein as a Fxn of Generation Number');
 subplot(1,2,1);
 hold on;
 title('Data');
-plot(dataRFPNaive(:, 1), dataRFPNaive(:, 2), 'r.');
-plot(dataYFPNaive(:, 1), dataYFPNaive(:, 2), 'y.');
 plot(dataCFPNaive(:, 1), dataCFPNaive(:, 2), 'b.');
+plot(dataYFPNaive(:, 1), dataYFPNaive(:, 2), 'y.');
+plot(dataRFPNaive(:, 1), dataRFPNaive(:, 2), 'r.');
 legend('tetR', 'lambdaCl', 'lacL');
 xlabel('Generation Number'); ylabel('Protein Molecules');
 hold off;
 subplot(1,2,2);
 hold on;
 title('Model');
-plot(mean(generationOutput), mean(tetROutput), 'r');
-plot(mean(generationOutput), mean(lambdaClOutput), 'y');
 plot(mean(generationOutput), mean(lacLOutput), 'b');
+plot(mean(generationOutput), mean(lambdaClOutput), 'y');
+plot(mean(generationOutput), mean(tetROutput), 'r');
 legend('tetR', 'lambdaCl', 'lacL');
 xlabel('Generation Number'); ylabel('Protein Molecules');
 hold off;
